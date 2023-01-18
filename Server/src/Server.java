@@ -17,12 +17,13 @@ public class Server {
 			
 			// Adresse et port du serveur
 			//String serverAddress = "127.0.0.1"; int serverPort = 5000;
-			System.out.println("Entrez l'adresse IP ainsi que le port d'ecoute: ");
 			Scanner userInput = new Scanner(System.in);
-		
+			System.out.println("Entrez l'adresse IP du serveur : ");
 		    String serverAddress = userInput.nextLine();
+		    Verifier.adressVerifier(serverAddress);
+		    
+		    System.out.println("Entrez le port d'ecoute: ");
 			int serverPort = userInput.nextInt();
-			Verifier.adressVerifier(serverAddress);
 			Verifier.portVerifier(serverPort);
 			
 			// Création de la connexien pour communiquer ave les, clients
@@ -32,7 +33,7 @@ public class Server {
 			
 			// Association de l'adresse et du port à la connexien
 			Listener.bind(new InetSocketAddress(serverIP, serverPort));
-			System.out.format("The server is running on %s:%d%n", serverAddress, serverPort);
+			System.out.format("Server running on %s:%d%n", serverAddress, serverPort);
 			
 			try {
 				// À chaque fois qu'un nouveau client se, connecte, on exécute la fonstion

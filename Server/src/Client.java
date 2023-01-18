@@ -10,12 +10,13 @@ public class Client {
 private static Socket socket;
 		
 	public static void main(String[] args) throws Exception {
-		System.out.println("Entrez l'adresse IP ainsi que le port d'ecoute: ");
+		System.out.println("Entrez l'adresse IP du serveur : ");
 		Scanner userInput = new Scanner(System.in);
-	
 	    String serverAddress = userInput.nextLine();
+	    Verifier.adressVerifier(serverAddress);
+	    
+	    System.out.println("Entrez le port d'ecoute : ");
 		int port = userInput.nextInt();
-		Verifier.adressVerifier(serverAddress);
 		Verifier.portVerifier(port);
 	    
 		// Création d'une nouvelle connexion aves le serveur
