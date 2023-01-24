@@ -3,9 +3,24 @@ import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
+
 
 public class Client {
-    
+	public static boolean userCommandPrompt(){
+		System.out.println("Enter command: ");
+		Scanner userCommandInput = new Scanner(System.in);
+		String userStringCommand = userCommandInput.nextLine();
+		String [] splitStr = userStringCommand.split("\\s+");
+		String firstInput = splitStr[0];
+		System.out.println(firstInput);
+		String close = "close";
+		if (firstInput.equals(close)){
+			System.out.println("Closing");
+			return false;
+		}	
+		return true;
+	}
 
 
 private static Socket socket;
@@ -24,6 +39,7 @@ private static Socket socket;
 		int port = 5006;
 		String serverAddress = "127.1.1.1";
 	    
+		
 		// Création d'une nouvelle connexion aves le serveur
 		socket = new Socket(serverAddress, port);
 		System.out.format("Serveur lancé sur [%s:%d]", serverAddress, port);
@@ -55,6 +71,9 @@ private static Socket socket;
 			
 		}
 		
+		while (userCommandPrompt()){}
+
+
 		// fermeture de La connexion avec le serveur
 		socket.close();
 	}
