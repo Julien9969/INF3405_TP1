@@ -11,20 +11,24 @@ public class Server {
 	private static ServerSocket Listener; 
 	// Application Serveur
 		public static void main(String[] args) throws Exception {
-		
+			
+			System.out.println("serveur");
 			// Compteur incrémenté à chaque connexion d'un client au serveur
 			int clientNumber = 0;
 			
 			// Adresse et port du serveur
 			//String serverAddress = "127.0.0.1"; int serverPort = 5000;
 			Scanner userInput = new Scanner(System.in);
-			System.out.println("Entrez l'adresse IP du serveur : ");
-		    String serverAddress = userInput.nextLine();
-		    Verifier.adressVerifier(serverAddress);
-		    
-		    System.out.println("Entrez le port d'ecoute: ");
-			int serverPort = userInput.nextInt();
-			Verifier.portVerifier(serverPort);
+//			System.out.println("Entrez l'adresse IP du serveur : ");
+//		    String serverAddress = userInput.nextLine();
+//		    Verifier.adressVerifier(serverAddress);
+//		    
+//		    System.out.println("Entrez le port d'ecoute: ");
+//			int serverPort = userInput.nextInt();
+//			Verifier.portVerifier(serverPort);
+			int serverPort = 5006;
+			String serverAddress = "127.1.1.1";
+			
 			
 			// Création de la connexien pour communiquer ave les, clients
 			Listener = new ServerSocket();
