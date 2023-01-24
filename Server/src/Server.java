@@ -15,17 +15,23 @@ public class Server {
 			// Compteur incrémenté à chaque connexion d'un client au serveur
 			int clientNumber = 0;
 			
-			// Adresse et port du serveur
-			//String serverAddress = "127.0.0.1"; int serverPort = 5000;
-			Scanner userInput = new Scanner(System.in);
-			System.out.println("Entrez l'adresse IP du serveur : ");
-		    String serverAddress = userInput.nextLine();
-		    Verifier.adressVerifier(serverAddress);
+			// // Adresse et port du serveur
+			// //String serverAddress = "127.0.0.1"; int serverPort = 5000;
+			// Scanner userInput = new Scanner(System.in);
+			// System.out.println("Entrez l'adresse IP du serveur : ");
+		    // String serverAddress = userInput.nextLine();
+		    // Verifier.adressVerifier(serverAddress);
 		    
-		    System.out.println("Entrez le port d'ecoute: ");
-			int serverPort = userInput.nextInt();
-			Verifier.portVerifier(serverPort);
+		    // System.out.println("Entrez le port d'ecoute: ");
+			// int serverPort = userInput.nextInt();
+			// Verifier.portVerifier(serverPort);
 			
+			String serverAddress =  "127.0.0.1";
+			int serverPort = 5000;
+
+
+
+
 			// Création de la connexien pour communiquer ave les, clients
 			Listener = new ServerSocket();
 			Listener.setReuseAddress(true);
