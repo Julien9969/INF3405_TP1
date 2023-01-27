@@ -1,8 +1,19 @@
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
+<<<<<<< HEAD
 import java.util.Scanner;
+=======
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+>>>>>>> alex
 
 public class ClientHandler extends Thread { // pour traiter la demande de chaque client sur un socket particulier
 	private Socket socket; 
@@ -13,36 +24,78 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 	}
 	public void run() { // Création de thread qui envoi un message à un client
 		try {
+
 			DataOutputStream out = new DataOutputStream(socket.getOutputStream()); // création de canal d’envoi 
 			out.writeUTF("Hello from server - you are client#" + clientNumber); // envoi de message
 			DataInputStream in = new DataInputStream(socket.getInputStream());
 		
 			
-				//while (true) {
-					System.out.println("Message A: ");
-					System.out.println(in.readUTF());
-					
-				//}	 
-					
-					String command;
-					
-					while (true) {
-						while((command = in.readUTF()) == null);
-							out.writeUTF(command);
-							System.out.println(command);
-							
-					}
+//				//while (true) {
+//					System.out.println("Message A: ");
+//					System.out.println(in.readUTF());
+//					
+//				//}	 
+//					
+//					String command;
+//					
+//					while (true) {
+//						while((command = in.readUTF()) == null);
+//							out.writeUTF(command);
+//							System.out.println(command);
+//							
+//					}
 				
-			} 
+			 String message, command;
+			 String[] messageParts;
+
+			while(true){
+				//reçoit messages du client
+				message = in.readUTF();	
+				messageParts = message.split("\\s+");
+				command = messageParts[0];
+				
+				
+				switch (command) {
+					case "mkdir":
+						mkdir(messageParts[1]);
+						break;
+						
+					default:
+						
+				}
+				
+				
+				//cree un repertoire
+				if (command.equals("mkdir")){
+					String dirName = messageParts[1];
+					Path path = Paths.get(dirName);
+					if (Files.notExists(path)){
+						Files.createDirectory(path);
+						System.out.println("Le fichier "+ messageParts[1]+" a ete cree");
+					}
+					else{
+						System.out.println("le repertoire existe deja");
+					}
+				}
+
+				//naviguer les repertoires
+				if (command.equals("cd")){
+
+				}
+				
+
+			}	
+		} 
+
 		catch (IOException e) {
 			System.out.println("Error handling client# " + clientNumber + ": " + e);
 		} 
 		
-		// finally {
-		// try {
-		// 	socket.close();
-		// } catch (IOException e) {
-		// 	System.out.println("Couldn't close a socket, what's going on?");}
-		// 	System.out.println("Connection with client# " + clientNumber+ " closed");}
+		finally {
+		try {
+			socket.close();
+		} catch (IOException e) {
+			System.out.println("Couldn't close a socket, what's going on?");}
+			System.out.println("Connection with client# " + clientNumber+ " closed");}
 		}
 }
