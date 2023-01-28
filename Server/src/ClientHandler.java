@@ -24,7 +24,7 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 			out.writeUTF("Hello from server - you are client#" + clientNumber); // envoi de message
 			DataInputStream in = new DataInputStream(socket.getInputStream());
 		
-			CommandsHandler commandsHandler = new CommandsHandler(out, clientNumber);
+			CommandsHandler commandsHandler = new CommandsHandler(in, out, clientNumber);
 			String message, command;
 			String[] messageParts;
 			boolean exit = false;

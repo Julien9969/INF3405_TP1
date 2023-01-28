@@ -1,5 +1,7 @@
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 //import java.io.IOException;
 
@@ -7,44 +9,42 @@ import java.io.IOException;
 
 public class CommandsHandler {
 	private DataOutputStream out;
+	DataInputStream in;
 	private File currentFolder;
 	int clientNumber;
 	
-	CommandsHandler(DataOutputStream out, int clientNumber){
+	
+	CommandsHandler(DataInputStream in, DataOutputStream out, int clientNumber){
 		this.out = out;
 		this.clientNumber = clientNumber;
-		
-		currentFolder = new File(System.getProperty("user.dir"));
-		// System.out.println("Debut " + this.currentFolder.getAbsolutePath());
+		this.in = in;
+		currentFolder = new File("./");
+		System.out.println("Debut " + this.currentFolder.getAbsolutePath());
 	}
 	
 	void cd (String path) {
-		File folder = new File(this.currentFolder.getAbsolutePath() + "/" + path);
+		File folder = new File(this.currentFolder, path);
 		
 		try {
 			
-			if (this.currentFolder.getParentFile() != null) {
-				if (path.contains("..") ) {
+			if (path.contains("..")) {
+				if (this.currentFolder.getParentFile() != null) {
 					this.currentFolder = this.currentFolder.getParentFile();
 					out.writeUTF("");
-					// System.out.println(".." + this.currentFolder.getAbsolutePath());
+				}
+				else { out.writeUTF("On est a la racine" ); }
+			}
+			else {
+				if (folder.exists()) {
+					this.currentFolder = folder;
+					out.writeUTF("");
 				}
 				else {
-					// System.out.println(this.currentFolder.getParent());
-					
-					if (folder.exists()) {
-						this.currentFolder = new File(this.currentFolder, path);
-						out.writeUTF("");
-					}
-					else {
-						out.writeUTF("On est a la racine" );
-					
-					}
+					out.writeUTF(path + " n'existe pas" );
 				}
 			}
-			else {out.writeUTF(path.toString() + " n'existe pas" );}
 			
-			out.writeUTF(currentFolder.getCanonicalPath());
+			out.writeUTF(currentFolder.getName().contains(".") ? "Server" : currentFolder.getName());
 			
 		} catch (IOException e) {
 				System.out.println("Error sending cd result to client : " + this.clientNumber + e);
@@ -53,20 +53,17 @@ public class CommandsHandler {
 	
 	void mkdir(String dirName) {
 		try {	
-			File folder = new File(currentFolder.getPath() + "/" + dirName);
+			File folder = new File(currentFolder.getName(), dirName);
 			
 			if (!folder.exists()) {
 				folder.mkdirs();
 				
-				System.out.println("1" + folder.getAbsolutePath());
-				System.out.println("2" + currentFolder.getAbsolutePath());
-				
-				out.writeUTF("Le dossier ./" + dirName + " a ete cree");
+				out.writeUTF("Le dossier " + dirName + " a ete cree");
 			}
 			else {
-				out.writeUTF("Le dossier ./" + dirName + " existe deja");
+				out.writeUTF("Le dossier " + dirName + " existe deja");
 			}
-			out.writeUTF(currentFolder.getCanonicalPath());
+			out.writeUTF(currentFolder.getName().contains(".") ? "Server" : currentFolder.getName());
 			
 		
 		} catch (IOException e) {
@@ -74,7 +71,29 @@ public class CommandsHandler {
 		}
 	}
 	
-	void upload(String fileName) {
+	// https://heptadecane.medium.com/file-transfer-via-java-sockets-e8d4f30703a5
+	void upload(String filePath) {
+		
+		
+		System.out.println("ici serveur upload");
+		
+		int bytes = 0;
+        try {
+        	// tell client that server ready
+        	this.out.writeUTF("");
+			FileOutputStream fileOutputStream = new FileOutputStream(this.currentFolder.getName() + "/" + filePath);
+	        
+	        long size = this.in.readLong();     // read file size
+	        byte[] buffer = new byte[4 * 1024];
+	        
+	        while (size > 0 && (bytes = this.in.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
+	        	fileOutputStream.write(buffer,0,bytes);
+	            size -= bytes; // read upto file size
+	        }
+	        fileOutputStream.close();
+        } catch (IOException e) {
+			System.out.println("Error in upload from the client : " + this.clientNumber + e);
+		}
 		
 	}
 	
@@ -90,12 +109,12 @@ public class CommandsHandler {
 				for (String file : filesList) {
 					message += file + "\n"; 
 				}
-			}
+			}	
 			else {
 				message += "Dossier vide"; 
 			}
 			out.writeUTF(message);
-			out.writeUTF(currentFolder.getCanonicalPath());
+			out.writeUTF(currentFolder.getName().contains(".") ? "Server" : currentFolder.getName());
 		
 		} catch (IOException e) {
 			System.out.println("Error sending mkdir result to client : " + this.clientNumber + e);
