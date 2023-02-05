@@ -3,6 +3,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 //import java.io.IOException;
 import java.net.Socket;
@@ -68,8 +69,31 @@ public class Commands {
 		}
 	}
 	
-	void download(String fileName) {
+	void download(String command) {
 		
+		String fileName = command.split("\\s+")[1];
+		System.out.println("ici client download");
+		
+		int bytes = 0;
+        try {
+        	// tell client that server ready
+        	out.writeUTF(command);
+			in.readUTF();
+			FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+	        
+	        long size = this.in.readLong();     // read file size
+	        byte[] buffer = new byte[4 * 1024];
+	        
+	        while (size > 0 && (bytes = this.in.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
+	        	fileOutputStream.write(buffer,0,bytes);
+	            size -= bytes; // read upto file size
+	        }
+	        fileOutputStream.close();
+        } catch (IOException e) {
+			System.out.println(e.getLocalizedMessage());
+
+		}
+
 	}
 	
 }

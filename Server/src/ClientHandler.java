@@ -50,10 +50,13 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 						break;
 						
 					case "upload":
+						System.out.println("here in handler");
 						commandsHandler.upload(messageParts[1]);
+						System.out.println("here");
 						break;
 						
 					case "download":
+						System.out.println("HANDLER - DOWNLOAD");
 						commandsHandler.download(messageParts[1]);
 						break;
 					

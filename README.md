@@ -1,2 +1,0 @@
-# INF3405_TP1
-TP1 du cours INF3405

@@ -3,6 +3,12 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 //import java.io.IOException;
 
 
@@ -73,8 +79,6 @@ public class CommandsHandler {
 	
 	// https://heptadecane.medium.com/file-transfer-via-java-sockets-e8d4f30703a5
 	void upload(String filePath) {
-		
-		
 		System.out.println("ici serveur upload");
 		
 		int bytes = 0;
@@ -97,8 +101,28 @@ public class CommandsHandler {
 		
 	}
 	
-	void download(String fileName) {
-		
+	void download(String filePath) {
+		System.out.println("ici serveur download");
+		int bytes = 0;
+        File file = new File(this.currentFolder.getName()+"/"+filePath);
+        	try {
+				if (file.exists()){
+					this.out.writeUTF("");
+					FileInputStream fileInputStream = new FileInputStream(file);
+					this.out.writeLong(file.length());
+					byte[] buffer = new byte[4*1024];
+					while((bytes=fileInputStream.read(buffer))!=-1){
+						this.out.write(buffer,0,bytes);
+						this.out.flush();
+					}
+					System.out.println("file sent");
+					fileInputStream.close();
+					//System.out.println("file sent");
+				}
+			}
+		catch (IOException e) {
+			System.out.println("Error while downloading file :" + e);
+		}
 	}
 	
 	void ls() {

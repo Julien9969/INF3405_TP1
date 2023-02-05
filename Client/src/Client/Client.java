@@ -2,9 +2,10 @@ package Client;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;  
 import java.io.IOException;
-
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -46,8 +47,9 @@ private static Socket socket;
 		
 		int port = 5006;
 		String serverAddress = "127.1.1.1";
-
-	    
+		InetAddress IP= InetAddress.getLocalHost();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd @ HH:mm:ss");  
+		LocalDateTime now = LocalDateTime.now();  
 		
 		// // Création d'une nouvelle connexion aves le serveur
 		// socket = new Socket(serverAddress, port);
@@ -78,7 +80,7 @@ private static Socket socket;
 		
 		while(!exit){
 			//reçoit messages du client
-			System.out.print(path + " > ");
+			System.out.print("["+IP.getHostAddress()+":"+port+" - "+dtf.format(now)+"]"+": "+ path + " > ");
 			command = userInput.nextLine();	
 			
 			messageParts = command.split("\\s+");
@@ -94,10 +96,12 @@ private static Socket socket;
 						break;
 						
 					case "upload":
+						System.out.println("here in client");
 						commands.upload(command);
 						break;
 						
 					case "download":
+						System.out.println("here in client");
 						commands.download(command);
 						break;
 					
