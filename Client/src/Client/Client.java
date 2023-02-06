@@ -13,51 +13,27 @@ import java.util.Scanner;
 
 
 public class Client {
-	public static boolean userCommandHandler(DataOutputStream out){
-		System.out.println("Enter command: ");
-		Scanner userCommandInput = new Scanner(System.in);
-		String userStringCommand = userCommandInput.nextLine();
-		if (userStringCommand.equals("close")){
-			System.out.println("Closing");
-			return false;
-		}
-		try {
-			out.writeUTF(userStringCommand);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return true;
-	}
 
-
-private static Socket socket;
+	private static Socket socket;
 		
 	public static void main(String[] args) throws Exception {
-
-//		System.out.println("Client");
-//		System.out.println("Entrez l'adresse IP du serveur : ");
+		System.out.println("Entrez l'adresse IP du serveur : ");
 		Scanner userInput = new Scanner(System.in);
-//	    String serverAddress = userInput.nextLine();
-//	    Verifier.adressVerifier(serverAddress);
-//	    
-//	    System.out.println("Entrez le port d'ecoute : ");
-//		int port = userInput.nextInt();
-//		Verifier.portVerifier(port);
+	    String serverAddress = userInput.nextLine();
+	    Verifier.adressVerifier(serverAddress);
+	    
+	    System.out.println("Entrez le port d'ecoute : ");
+		int port = userInput.nextInt();
 		
-		int port = 5006;
-		String serverAddress = "127.1.1.1";
+		Verifier.portVerifier(port);
+		
 		InetAddress IP= InetAddress.getLocalHost();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd @ HH:mm:ss");  
 		LocalDateTime now = LocalDateTime.now();  
 		
 		// // Création d'une nouvelle connexion aves le serveur
-		// socket = new Socket(serverAddress, port);
 		socket = new Socket(serverAddress, port);
 		System.out.format("Serveur lancé sur [%s:%d]", serverAddress, port);
-		
-
-
 		
 		// Céatien d'un canal entrant pour recevoir les messages envoyés, par le serveur
 		DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -66,15 +42,13 @@ private static Socket socket;
 		// Attente de la réception d'un message envoyé par le, server sur le canal
 		String helloMessageFromServer = in.readUTF();
 		System.out.println(helloMessageFromServer);
-		
 
 		out.writeUTF("bonjour");
 		out.flush();
-		
-		
+			
 		Commands commands = new Commands(socket, in, out);
 		String command, commandPrefix;
-		String path = "Server";/*System.getProperty("user.dir")*/;
+		String path = "Server";
 		String[] messageParts;
 		boolean exit = false;
 		
@@ -84,7 +58,6 @@ private static Socket socket;
 			command = userInput.nextLine();	
 			
 			messageParts = command.split("\\s+");
-//			System.out.println(messageParts[0]);
 			commandPrefix = messageParts[0];
 			
 			if  (IsValidCommand(messageParts)) {
@@ -96,12 +69,10 @@ private static Socket socket;
 						break;
 						
 					case "upload":
-						System.out.println("here in client");
 						commands.upload(command);
 						break;
 						
 					case "download":
-						System.out.println("here in client");
 						commands.download(command);
 						break;
 					

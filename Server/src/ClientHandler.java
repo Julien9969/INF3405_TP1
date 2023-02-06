@@ -2,13 +2,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ClientHandler extends Thread { // pour traiter la demande de chaque client sur un socket particulier
 	private Socket socket; 
@@ -17,6 +12,16 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 		this.socket = socket;
 		this.clientNumber = clientNumber; System.out.println("New connection with client#" + clientNumber + " at" + socket);
 	}
+	
+	public void serverDisplay(String command){
+		int port = this.socket.getPort();
+		String address = this.socket.getRemoteSocketAddress().toString();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");  
+		LocalDateTime now = LocalDateTime.now(); 
+		System.out.print("["+address+" - "+dtf.format(now)+"]"+": "+ command +"\n");
+	}
+
+
 	public void run() { // Création de thread qui envoi un message à un client
 		try {
 
@@ -50,13 +55,10 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 						break;
 						
 					case "upload":
-						System.out.println("here in handler");
-						commandsHandler.upload(messageParts[1]);
-						System.out.println("here");
+						commandsHandler.upload(messageParts[1]);						
 						break;
 						
-					case "download":
-						System.out.println("HANDLER - DOWNLOAD");
+					case "download":					
 						commandsHandler.download(messageParts[1]);
 						break;
 					
@@ -64,27 +66,7 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 						exit = true;
 						break;
 				}
-				
-				
-				//cree un repertoire
-//				if (command.equals("mkdir")){
-//					String dirName = messageParts[1];
-//					Path path = Paths.get(dirName);
-//					if (Files.notExists(path)){
-//						Files.createDirectory(path);
-//						System.out.println("Le fichier "+ messageParts[1]+" a ete cree");
-//					}
-//					else{
-//						System.out.println("le repertoire existe deja");
-//					}
-//				}
-//
-//				//naviguer les repertoires
-//				if (command.equals("cd")){
-//
-//				}
-				
-
+				serverDisplay(message);
 			}	
 		} 
 

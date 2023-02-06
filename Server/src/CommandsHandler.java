@@ -115,9 +115,7 @@ public class CommandsHandler {
 						this.out.write(buffer,0,bytes);
 						this.out.flush();
 					}
-					System.out.println("file sent");
-					fileInputStream.close();
-					//System.out.println("file sent");
+					fileInputStream.close();		
 				}
 			}
 		catch (IOException e) {
