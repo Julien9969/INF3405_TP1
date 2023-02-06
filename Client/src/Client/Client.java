@@ -88,6 +88,7 @@ public class Client {
 		// fermeture de La connexion avec le serveur
 		}
 		socket.close();
+		userInput.close();
 	}
 	
 	static boolean IsValidCommand(String[] command) {

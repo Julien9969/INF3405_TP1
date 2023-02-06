@@ -25,7 +25,7 @@ public class Server {
 		    System.out.println("Entrez le port d'ecoute: ");
 			int serverPort = userInput.nextInt();
 			Verifier.portVerifier(serverPort);
-
+			
 
 
 			// Création de la connexien pour communiquer ave les, clients
@@ -36,6 +36,7 @@ public class Server {
 			// Association de l'adresse et du port à la connexien
 			Listener.bind(new InetSocketAddress(serverIP, serverPort));
 			System.out.format("Server running on %s:%d%n", serverAddress, serverPort);
+			userInput.close();
 			
 			try {
 				// À chaque fois qu'un nouveau client se, connecte, on exécute la fonstion
@@ -48,6 +49,7 @@ public class Server {
 			} finally {
 				// Fermeture de la connexion
 				Listener.close();
+				
 			}
 	} 
 }
