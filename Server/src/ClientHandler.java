@@ -14,7 +14,6 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 	}
 	
 	public void serverDisplay(String command){
-		int port = this.socket.getPort();
 		String address = this.socket.getRemoteSocketAddress().toString();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd@HH:mm:ss");  
 		LocalDateTime now = LocalDateTime.now(); 
