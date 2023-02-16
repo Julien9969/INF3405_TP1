@@ -8,9 +8,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-//import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
-
-
 public class Client {
 
 	private static Socket socket;

@@ -5,9 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
 
-//import java.io.IOException;
-
-
 
 public class CommandsHandler {
 	private DataOutputStream out;
@@ -79,16 +76,16 @@ public class CommandsHandler {
 		
 		int bytes = 0;
         try {
-        	// tell client that server ready
+        	// dire au client qu'il peut envoyer le fichier
         	this.out.writeUTF("");
 			FileOutputStream fileOutputStream = new FileOutputStream(this.currentFolder.getName() + "/" + filePath);
 	        
-	        long size = this.in.readLong();     // read file size
+	        long size = this.in.readLong();     // taille du fichier
 	        byte[] buffer = new byte[4 * 1024];
 	        
 	        while (size > 0 && (bytes = this.in.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
 	        	fileOutputStream.write(buffer,0,bytes);
-	            size -= bytes; // read upto file size
+	            size -= bytes; // le reste a lire
 	        }
 	        fileOutputStream.close();
         } catch (IOException e) {

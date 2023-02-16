@@ -39,7 +39,6 @@ public class ClientHandler extends Thread { // pour traiter la demande de chaque
 				messageParts = message.split("\\s+");
 				command = messageParts[0];
 				
-				
 				switch (command) {
 					case "cd":
 						commandsHandler.cd(messageParts[1]);

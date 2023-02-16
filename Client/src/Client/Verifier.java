@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 public class Verifier {
 	
-	
 	// Source : https://www.codeurjava.com/2015/05/les-expressions-regulieres-avec-regex.html
 	public static void adressVerifier(String ip) {
 		

@@ -47,9 +47,9 @@ public class Commands {
         		
 		        FileInputStream fileInputStream = new FileInputStream(file);
 		        
-		        // send file size
+		        // envoyer la taille du fichier
 		        this.out.writeLong(file.length());  
-		        // break file into chunks
+		        // séparer le fichier en paquets de 4KiB
 		        byte[] buffer = new byte[4*1024];
 		        
 		        System.out.println("file is uploading...");
@@ -75,17 +75,17 @@ public class Commands {
 		
 		int bytes = 0;
         try {
-        	// tell client that server ready
+        	// Dire au client que le serveur est prêt
         	out.writeUTF(command);
 			in.readUTF();
 			FileOutputStream fileOutputStream = new FileOutputStream(fileName);
 	        
-	        long size = this.in.readLong();     // read file size
+	        long size = this.in.readLong();     // lire la taille du fichier
 	        byte[] buffer = new byte[4 * 1024];
 	        
 	        while (size > 0 && (bytes = this.in.read(buffer, 0, (int)Math.min(buffer.length, size))) != -1) {
 	        	fileOutputStream.write(buffer,0,bytes);
-	            size -= bytes; // read upto file size
+	            size -= bytes; // lire jusqu'à la taille du fichier
 	        }
 	        fileOutputStream.close();
         } catch (IOException e) {
